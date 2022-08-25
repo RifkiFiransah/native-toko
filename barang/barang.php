@@ -1,4 +1,14 @@
 <?php include '../layouts/header.php'; ?>
+<?php
+$query = mysqli_query($conn, "SELECT * FROM tb_barang");
+if (isset($_POST['search'])) {
+  $keyword = $_POST['keyword'];
+  $search_query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE nama_barang LIKE '%$keyword%'");
+  if (mysqli_num_rows($search_query) > 0) {
+    $query = $search_query;
+  }
+}
+?>
 <main class="my-5">
   <div class="row">
     <div class="col-sm-10 border mx-3">
@@ -24,7 +34,6 @@
 
         <tbody>
           <?php
-          $query = mysqli_query($conn, "SELECT * FROM tb_barang");
           $no = 1;
           while ($barang = mysqli_fetch_assoc($query)) : ?>
             <tr>
