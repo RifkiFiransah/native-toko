@@ -1,6 +1,6 @@
 <?php
 include '../koneksi.php';
-
+session_start();
 function upload()
 {
   $namaFile = $_FILES['gambar']['name'];
@@ -54,6 +54,7 @@ if (isset($_POST['input'])) {
 
   $query = "INSERT INTO tb_barang VALUES('', '$nama_barang', '$deskripsi', '$harga', '$stok', '$gambar')";
   mysqli_query($conn, $query);
+  $_SESSION['sukses'] = 'Data Berhasil Ditambahkan';
   return header('location: barang.php');
 } else {
   die("Error : " . mysqli_error($conn));

@@ -22,7 +22,7 @@ if (isset($_POST['selesai'])) {
 
   $berhasil = mysqli_query($conn, "INSERT INTO tb_pesanan VALUES('', '$id_barang', '$invoice_id', '$id_user', '$keterangan')");
   if ($berhasil) {
-    $_SESSION['sukses'] = true;
+    $_SESSION['sukses'] = 'Pesanan anda berhasil dan sekarang sedang di proses';
     header("location: detail.php?id=$id_barang");
   }
 }

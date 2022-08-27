@@ -9,6 +9,16 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
       <h2>Detail Barang</h2>
       <hr>
       <?php
+      if (isset($_SESSION['sukses'])) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>' . $_SESSION['sukses'] . '.</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+      }
+      ?>
+      <?php
       while ($barang = mysqli_fetch_assoc($query)) :
         $stok = (int) $barang['stok'];
       ?>
@@ -24,7 +34,7 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
                 <p class="card-text">Stok : <?= $barang['stok']; ?></p>
                 <p class="card-text"><small class="text-muted">Rp. <?= number_format($barang['harga'], 0, ',', '.'); ?></small></p>
                 <a href="pembayaran.php?id=<?= $barang['id_barang']; ?>" class="btn btn-primary">Beli</a>
-                <a href="../index.php" class="btn btn-secondary">back</a>
+                <a href="barang.php" class="btn btn-secondary">back</a>
               </div>
             </div>
           </div>
@@ -59,10 +69,8 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
 if (isset($_SESSION['sukses'])) {
   $stok -= 1;
   $update = mysqli_query($conn, "UPDATE tb_barang SET stok='$stok' WHERE id_barang='$id'");
-  $_SESSION['sukses'] = null;
-  echo "<script>alert('Check Out Anda Berhasil sedang di proses');</script>";
-  echo "<script>location.reload();</script>";
 }
+unset($_SESSION['sukses']);
 // var_dump($_SESSION);
 ?>
 <?php require 'layouts/footer.php'; ?>

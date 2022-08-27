@@ -1,5 +1,7 @@
 <?php
 require '../koneksi.php';
+session_start();
+
 function upload()
 {
   $namaFile = $_FILES['gambar']['name'];
@@ -58,6 +60,8 @@ if (isset($_POST['update'])) {
 
   $query = "UPDATE tb_barang SET nama_barang='$nama_barang', deskripsi='$deskripsi', harga='$harga', stok='$stok', gambar='$gambar' WHERE id_barang='$id'";
   mysqli_query($conn, $query);
-
+  $_SESSION['sukses'] = 'Data Berhasil Di Update';
   header('Location: barang.php');
+} else {
+  die('Error :' . mysqli_error($conn));
 }

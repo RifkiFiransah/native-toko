@@ -58,7 +58,7 @@ if (!$_SESSION['login'] || $_SESSION['role'] !== 'user') {
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
           <form method="POST" action="http://localhost/native_toko/front-end/barang.php" class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Input Keyword" aria-label="Search" name="keyword">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="search">Search</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="search"><i class="fas fa-search"></i></button>
           </form>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">

@@ -18,7 +18,17 @@ if (isset($_POST['search'])) {
         <i class="fas fa-plus-circle"></i> Tambah Data
       </button>
       <a href="print.php" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mb-3"><i class="fas fa-print"></i> Print</a>
-
+      <?php
+      if (isset($_SESSION['sukses'])) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>' . $_SESSION['sukses'] . '.</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>';
+        unset($_SESSION['sukses']);
+      }
+      ?>
       <table class="table">
         <thead>
           <tr>
