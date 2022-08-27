@@ -2,6 +2,21 @@
 session_start();
 require_once 'function.php';
 
+if (isset($_COOKIE['uniq']) && isset($_COOKIE['keyValue'])) {
+  $id  = $_COOKIE['uniq'];
+  $user = $_COOKIE['keyValue'];
+  $result = mysqli_query($conn, "SELECT * FROM tb_user WHERE id_user='$id'");
+
+  $row = mysqli_fetch_assoc($result);
+
+  if ($user === hash('sha256', $row['username'])) {
+    $_SESSION['login'] = true;
+    $_SESSION['role'] = "user";
+    $_SESSION['id_user'] = $row['id_user'];
+    header("location: index.php");
+  }
+}
+
 if (isset($_POST['login'])) {
   $username = $_POST['username'];
   $password = $_POST['password'];
@@ -12,6 +27,10 @@ if (isset($_POST['login'])) {
     $row = mysqli_fetch_assoc($result);
     if (password_verify($password, $row['password'])) {
       if ($row['role'] == 'user') {
+        if (isset($_POST['remember'])) {
+          setcookie('uniq', $row['id_user'], time() + 300);
+          setcookie('keyValue', hash('sha256', $row['username']), time() + 300);
+        }
         $_SESSION['login'] = true;
         $_SESSION['role'] = "user";
         $_SESSION['id_user'] = $row['id_user'];
@@ -65,12 +84,14 @@ if (isset($_POST['login'])) {
                 <form action="" class="align-content-center" method="POST">
                   <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" name="username" id="username" class="form-control bg-transparent" placeholder="Masukan Username Anda">
+                    <input type="text" name="username" id="username" class="form-control bg-transparent" placeholder="Masukan Username Anda" required>
                   </div>
                   <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukan Password">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukan Password" required>
                   </div>
+                  <input type="checkbox" name="remember" id="remember">
+                  <label for="remember">Remember Me?</label>
 
                   <button type="submit" class="btn btn-primary form-control my-2" name="login">Masuk</button>
                   <p class="text-center mt-3">Belum punya akun? <a href="registrasi.php">Registrasi</a></p>

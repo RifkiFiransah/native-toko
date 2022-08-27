@@ -118,7 +118,7 @@ if (!$_SESSION['login'] || $_SESSION['role'] !== 'admin') {
             </div>
         </main>
         <footer class="footer bg-light text-center text-secondary mt-3 p-1 border-top">
-          <p>Footer</p>
+          <p><small> Copyright 2022 Kelompok 1 JWD VSGA </small></p>
         </footer>
       </div>
     </div>

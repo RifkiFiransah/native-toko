@@ -4,9 +4,9 @@
     <div class="col-lg-10 border mx-3">
       <h2 class="my-3">Data Invoice</h2>
       <hr>
-      <a href="print.php" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mb-3"><i class="fas fa-print"></i> Print</a>
-
-      <table class="table">
+      <a href="print.php" target="_blank" rel="noopener noreferrer" class="btn btn-danger mb-3"><i class="fas fa-print"></i> Print PDF</a>
+      <button id="excel" class="btn btn-success mb-3"><i class="fas fa-print"></i> Print Excel</button>
+      <table class="table" id="tableInvoice">
         <thead>
           <tr>
             <th>No</th>
@@ -21,7 +21,7 @@
         <tbody>
           <?php
           $no = 1;
-          $queryJoin = "SELECT * FROM tb_pesanan INNER JOIN tb_barang ON tb_pesanan.id_barang=tb_barang.id_barang INNER JOIN tb_invoice ON tb_pesanan.id_invoice=tb_invoice.id_invoice INNER JOIN tb_user ON tb_pesanan.id_user=tb_user.id_user";
+          $queryJoin = "SELECT * FROM tb_pesanan INNER JOIN tb_barang ON tb_pesanan.id_barang=tb_barang.id_barang INNER JOIN tb_invoice ON tb_pesanan.id_invoice=tb_invoice.id_invoice INNER JOIN tb_user ON tb_pesanan.id_user=tb_user.id_user ORDER BY id DESC";
           $query = mysqli_query($conn, $queryJoin);
           while ($invoice = mysqli_fetch_assoc($query)) :
           ?>
@@ -42,4 +42,13 @@
     </div>
   </div>
 </main>
+<script>
+  $('#excel').click(function() {
+    $('#tableInvoice').table2excel({
+      exclude: ".excludeThisClass",
+      name: "Data Invoice",
+      filename: "DataInvoice.xls"
+    });
+  });
+</script>
 <?php include '../layouts/footer.php'; ?>

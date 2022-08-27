@@ -10,7 +10,7 @@ if (isset($_POST['update'])) {
   if ($password == null) {
     $update = "UPDATE tb_user SET nama_lengkap='$nama_lengkap', username='$username' WHERE id_user='$id_user'";
     mysqli_query($conn, $update);
-    $_SESSION['sukses'] = true;
+    $_SESSION['sukses'] = 'Data Berhasil Di Update';
     header('location: akun.php');
   } else {
     $newPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -26,6 +26,17 @@ if (isset($_POST['update'])) {
     <div class="col-lg-6 border mx-3 rounded">
       <h2>Akun</h2>
       <hr>
+      <?php
+      if (isset($_SESSION['sukses'])) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Data Berhasil Di Update.</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        $_SESSION['sukses'] = null;
+      }
+      ?>
       <?php
       $id = $_SESSION['id_user'];
       $query = mysqli_query($conn, "SELECT * FROM tb_user WHERE id_user='$id'");
@@ -51,10 +62,4 @@ if (isset($_POST['update'])) {
     </div>
   </div>
 </main>
-<?php
-if (isset($_SESSION['sukses'])) {
-  $_SESSION['sukses'] = null;
-  echo "<script>alert('Update Berhasil')</script>";
-}
-?>
 <?php include 'layouts/footer.php'; ?>

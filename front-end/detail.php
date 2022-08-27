@@ -9,16 +9,6 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
       <h2>Detail Barang</h2>
       <hr>
       <?php
-      if (isset($_SESSION['sukses'])) {
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>' . $_SESSION['sukses'] . '.</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>';
-      }
-      ?>
-      <?php
       while ($barang = mysqli_fetch_assoc($query)) :
         $stok = (int) $barang['stok'];
       ?>
@@ -33,8 +23,12 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
                 <p class="card-text"><?= $barang['deskripsi']; ?>.</p>
                 <p class="card-text">Stok : <?= $barang['stok']; ?></p>
                 <p class="card-text"><small class="text-muted">Rp. <?= number_format($barang['harga'], 0, ',', '.'); ?></small></p>
-                <a href="pembayaran.php?id=<?= $barang['id_barang']; ?>" class="btn btn-primary">Beli</a>
-                <a href="barang.php" class="btn btn-secondary">back</a>
+                <?php if ($barang['stok'] <= 1) {
+                  echo '<p class="card-text">Barang Sudah Habis Terjual.</p>';
+                } else { ?>
+                  <a href="pembayaran.php?id=<?= $barang['id_barang']; ?>&stok=<?= $stok; ?>" class="btn btn-primary">Beli</a>
+                  <a href="barang.php" class="btn btn-secondary">back</a>
+                <?php } ?>
               </div>
             </div>
           </div>
@@ -46,9 +40,7 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
     <?php
     $query = mysqli_query($conn, "SELECT * FROM tb_barang");
     while ($barang = mysqli_fetch_assoc($query)) :
-      if ($barang['id_barang'] == $id) {
-        echo '';
-      } else {
+      if ($barang['id_barang'] != $id) :
     ?>
         <div class="col-lg-3">
           <div class="card">
@@ -61,16 +53,9 @@ $query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE id_barang='$id'");
           </div>
         </div>
     <?php
-      }
+      endif;
     endwhile; ?>
   </div>
 </main>
-<?php
-if (isset($_SESSION['sukses'])) {
-  $stok -= 1;
-  $update = mysqli_query($conn, "UPDATE tb_barang SET stok='$stok' WHERE id_barang='$id'");
-}
-unset($_SESSION['sukses']);
-// var_dump($_SESSION);
-?>
+
 <?php require 'layouts/footer.php'; ?>

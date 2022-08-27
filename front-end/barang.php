@@ -1,11 +1,11 @@
 <?php include 'layouts/header.php'; ?>
 <?php
 
-$query = mysqli_query($conn, "SELECT * FROM tb_barang");
+$query = mysqli_query($conn, "SELECT * FROM tb_barang ORDER BY id_barang DESC");
 if (isset($_POST['search'])) {
   $keyword = $_POST['keyword'];
 
-  $search_query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE nama_barang LIKE '%$keyword%'");
+  $search_query = mysqli_query($conn, "SELECT * FROM tb_barang WHERE nama_barang LIKE '%$keyword%' ORDER BY id_barang DESC");
   if (mysqli_num_rows($search_query) > 0) {
     $query = $search_query;
   }

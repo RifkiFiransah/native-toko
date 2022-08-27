@@ -1,30 +1,36 @@
 <?php include 'layouts/header.php'; ?>
 <?php
-if (isset($_POST['selesai'])) {
-  $nama = $_POST['nama'];
-  $alamat = $_POST['alamat'];
-  $telp = $_POST['telp'];
-  $bank = $_POST['bank'];
-  $kurir = $_POST['kurir'];
-  $tgl_pesan = date("Y-m-d H:i:s");
-  $batas_bayar = date("Y-m-d H:i:s", strtotime("+1 days"));
+if ($_GET['stok'] != 0) {
+  if (isset($_POST['selesai'])) {
+    $nama = $_POST['nama'];
+    $alamat = $_POST['alamat'];
+    $telp = $_POST['telp'];
+    $bank = $_POST['bank'];
+    $kurir = $_POST['kurir'];
+    $tgl_pesan = date("Y-m-d H:i:s");
+    $batas_bayar = date("Y-m-d H:i:s", strtotime("+1 days"));
 
-  mysqli_query($conn, "INSERT INTO tb_invoice VALUES('', '$nama', '$telp', '$alamat', '$bank', '$kurir', '$tgl_pesan', '$batas_bayar')");
+    mysqli_query($conn, "INSERT INTO tb_invoice VALUES('', '$nama', '$telp', '$alamat', '$bank', '$kurir', '$tgl_pesan', '$batas_bayar')");
 
-  $queryInvoice = mysqli_query($conn, "SELECT * FROM tb_invoice ORDER BY id_invoice DESC LIMIT 1");
-  while ($invoice = mysqli_fetch_assoc($queryInvoice)) {
-    $invoice_id = (int) $invoice['id_invoice'];
-    // var_dump($invoice_id);
+    $queryInvoice = mysqli_query($conn, "SELECT * FROM tb_invoice ORDER BY id_invoice DESC LIMIT 1");
+    while ($invoice = mysqli_fetch_assoc($queryInvoice)) {
+      $invoice_id = (int) $invoice['id_invoice'];
+      // var_dump($invoice_id);
+    }
+    $id_barang = (int) $_GET['id'];
+    $id_user = (int) $_SESSION['id_user'];
+    $keterangan = 'Proses';
+
+    $berhasil = mysqli_query($conn, "INSERT INTO tb_pesanan VALUES('', '$id_barang', '$invoice_id', '$id_user', '$keterangan')");
+    if ($berhasil) {
+      $stok = $_GET['stok'] - 1;
+      $update = mysqli_query($conn, "UPDATE tb_barang SET stok='$stok' WHERE id_barang='$id_barang'");
+      $_SESSION['sukses'] = 'Pesanan anda berhasil dan sekarang sedang di proses';
+      header("location: pesanan.php");
+    }
   }
-  $id_barang = (int) $_GET['id'];
-  $id_user = (int) $_SESSION['id_user'];
-  $keterangan = 'Proses';
-
-  $berhasil = mysqli_query($conn, "INSERT INTO tb_pesanan VALUES('', '$id_barang', '$invoice_id', '$id_user', '$keterangan')");
-  if ($berhasil) {
-    $_SESSION['sukses'] = 'Pesanan anda berhasil dan sekarang sedang di proses';
-    header("location: detail.php?id=$id_barang");
-  }
+} else {
+  die('Error  : ' . mysqli_connect_error($conn));
 }
 ?>
 <main class="my-3">

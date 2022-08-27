@@ -6,6 +6,17 @@ include 'layouts/header.php';
     <div class="col-md-10 border my-3 mx-3 rounded">
       <h2>Pesanan</h2>
       <hr>
+      <?php
+      if (isset($_SESSION['sukses'])) {
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>' . $_SESSION['sukses'] . '.</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        unset($_SESSION['sukses']);
+      }
+      ?>
       <table class="table">
         <thead>
           <tr>
@@ -22,7 +33,7 @@ include 'layouts/header.php';
           <?php
           $id_user = $_SESSION['id_user'];
           $no = 1;
-          $queryJoin =  "SELECT * FROM tb_pesanan INNER JOIN tb_barang ON tb_pesanan.id_barang=tb_barang.id_barang INNER JOIN tb_invoice ON tb_pesanan.id_invoice=tb_invoice.id_invoice INNER JOIN tb_user ON tb_pesanan.id_user=tb_user.id_user WHERE tb_pesanan.id_user='$id_user'";
+          $queryJoin =  "SELECT * FROM tb_pesanan INNER JOIN tb_barang ON tb_pesanan.id_barang=tb_barang.id_barang INNER JOIN tb_invoice ON tb_pesanan.id_invoice=tb_invoice.id_invoice INNER JOIN tb_user ON tb_pesanan.id_user=tb_user.id_user WHERE tb_pesanan.id_user='$id_user' ORDER BY id DESC";
           $query = mysqli_query($conn, $queryJoin);
           while ($pesanan_user = mysqli_fetch_assoc($query)) :
           ?>

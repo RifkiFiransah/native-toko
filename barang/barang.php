@@ -17,7 +17,11 @@ if (isset($_POST['search'])) {
       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
         <i class="fas fa-plus-circle"></i> Tambah Data
       </button>
-      <a href="print.php" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mb-3"><i class="fas fa-print"></i> Print</a>
+      <a href="print.php" target="_blank" rel="noopener noreferrer" class="btn btn-danger mb-3"><i class="fas fa-print"></i> Print PDF</a>
+      <button class="btn btn-success mb-3" id="excelBarang">
+        <i class="fas fa-print">
+        </i> Print Excel
+      </button>
       <?php
       if (isset($_SESSION['sukses'])) {
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -29,7 +33,7 @@ if (isset($_POST['search'])) {
         unset($_SESSION['sukses']);
       }
       ?>
-      <table class="table">
+      <table class="table" id="tableBarang">
         <thead>
           <tr>
             <th>No</th>
@@ -106,6 +110,17 @@ if (isset($_POST['search'])) {
     </div>
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="../assets/js/jquery.table2excel.js"></script>
+<script>
+  $('#excelBarang').click(function() {
+    $('#tableBarang').table2excel({
+      exclude: ".excludeThisClass",
+      name: "Data Barang",
+      filename: "DataBarang.xls"
+    });
+  });
+</script>
 <?php
 if (isset($_GET['hapusId'])) {
   $id  = $_GET['hapusId'];
